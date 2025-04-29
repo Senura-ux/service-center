@@ -157,7 +157,7 @@ function BreakdownDashboard() {
     </span>
   </a>
 </nav>
-<nav className="flex-1 space-y-2">
+{/* <nav className="flex-1 space-y-2">
   <a
     href="#"
     onClick={() => setCurrentView("driverView")}
@@ -189,7 +189,7 @@ function BreakdownDashboard() {
       Driver Dashboard
     </span>
   </a>
-</nav>
+</nav> */}
   </div>
 </div>
 
