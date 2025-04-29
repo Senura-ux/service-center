@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Spinner from "../BookingManagement/Spinner";
-import axios from "axios"; // Assuming axios for making API calls
+import axios from "axios";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -11,8 +11,8 @@ function LoginForm() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email); // Regular expression for email validation
-  const containsAtSymbol = (email) => email.includes("@"); // Check if email contains '@'
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const containsAtSymbol = (email) => email.includes("@");
 
   const handleLogin = async () => {
     // Form validation
@@ -40,51 +40,79 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      // Replace with your actual API URL
-      const response = await axios.post("http://localhost:5555/api/user/login", {
-        email,
-        password,
-      });
+      // First, try login with admin/user credentials
+      try {
+        const response = await axios.post("http://localhost:5555/api/user/login", {
+          email,
+          password,
+        });
 
-      if (response.status === 200) {
-        const { token, username, _id: userId } = response.data;
+        if (response.status === 200) {
+          const { token, username, _id: userId } = response.data;
+          
+          localStorage.setItem('user', JSON.stringify({ username, token, userId, email, password }));
+          enqueueSnackbar("Login Successful", { variant: "success" });
 
-        // Debugging: Check if userId is present
-        if (!userId) {
-          console.error("userId is missing from the response.");
+          // Admin redirections
+          if (email === "bookingAdmin@gmail.com") {
+            navigate("/dashboard/Bookadmin");
+          } else if (email === "salesmanager@gmail.com") {
+            navigate("/salesmanager");
+          } else if (email === "senura123@gmail.com") {
+            navigate("/dashboard/senura");
+          } else if (email === "financeManager@gmail.com") {
+            navigate("/dashboard/finance/dashboard");
+          } else if (email === "hrManager@gmail.com") {
+            navigate("/dashboard/emp/home");
+          } else if (email === "supportAdmin@gmail.com") {
+            navigate("/dashboard/Customer/dashboard");
+          } else if (email === "breakdownAdmin@gmail.com") {
+            navigate("/dashboard/breakdown/dashboard");
+          } else if (email === "vehicleAdmin@gmail.com") {
+            navigate("/dashboard/vehicle/dashboard");
+          } else {
+            navigate("/");
+          }
+          
+          window.location.reload();
+          return;
         }
+      } catch (userError) {
+        // If regular user login fails, try employee login (for drivers)
+        try {
+          // Try to login as a driver
+          const driverResponse = await axios.post("http://localhost:5555/empmanageRequests/login", {
+            email,
+            password,
+          });
 
-        // Store user details in localStorage
-        localStorage.setItem('user', JSON.stringify({ username, token, userId, password}));
-        // Show success message
-        enqueueSnackbar("Login Successful", { variant: "success" });
-
-        // Navigation logic for different users
-        if (email === "bookingAdmin@gmail.com") {
-          navigate("/dashboard/Bookadmin");
-        } else if (email === "salesmanager@gmail.com") {
-          navigate("/salesmanager");
-        } else if (email === "senura123@gmail.com") {
-          navigate("/dashboard/senura");
-        } else if (email === "financeManager@gmail.com") {
-          navigate("/dashboard/finance/dashboard");
-        } else if (email === "hrManager@gmail.com") {
-          navigate("/dashboard/emp/home");
-        } else if (email === "supportAdmin@gmail.com") {
-          navigate("/dashboard/Customer/dashboard");
-        } else if (email === "breakdownAdmin@gmail.com") {
-          navigate("/dashboard/breakdown/dashboard");
-        } else if (email === "vehicleAdmin@gmail.com") {
-          navigate("/dashboard/vehicle/dashboard");
-        } else {
-          navigate("/");
+          if (driverResponse.status === 200 && driverResponse.data.success) {
+            const { employeeName, _id: userId, position } = driverResponse.data.employee;
+            
+            // Store driver information in localStorage
+            localStorage.setItem('user', JSON.stringify({
+              username: employeeName,
+              userId,
+              email,
+              position,
+              isDriver: true
+            }));
+            
+            enqueueSnackbar("Driver Login Successful", { variant: "success" });
+            
+            // Redirect to the driver dashboard
+            navigate("/dashboard/breakdown/driver");
+            window.location.reload();
+            return;
+          }
+        } catch (driverError) {
+          console.error("Driver login error:", driverError);
         }
-
-        // Refresh the page
-        window.location.reload();
-      } else {
-        enqueueSnackbar("Invalid email or password", { variant: "error" });
       }
+      
+      // If we get here, both login attempts failed
+      enqueueSnackbar("Invalid email or password", { variant: "error" });
+      
     } catch (error) {
       enqueueSnackbar("Login failed. Please check your credentials.", { variant: "error" });
     } finally {
@@ -92,9 +120,10 @@ function LoginForm() {
     }
   };
 
+  // Rest of your component remains the same
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      {loading && <Spinner />} {/* Show a spinner while loading */}
+      {loading && <Spinner />}
       <div className="flex flex-col max-w-lg w-full bg-white shadow-md rounded-lg p-8">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Login</h1>
 
@@ -126,7 +155,7 @@ function LoginForm() {
         <button
           onClick={handleLogin}
           className="bg-red-600 text-white font-semibold text-lg py-3 mt-4 rounded-lg hover:bg-red-700 transition-all duration-200 ease-in-out disabled:opacity-50"
-          disabled={loading} // Disable button while loading
+          disabled={loading}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
