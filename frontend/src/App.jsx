@@ -17,6 +17,19 @@ import Bookadmin from "./BookingManagement/Bookadmin";
 import DashboardHeader from "./AdminDashboard/dashboardHeader"
 import BookOverview from "./AdminDashboard/BookOverview"
 
+
+
+//cus support
+import CreateCustomer from './CustomerSupport/CreateCustomer';
+import ShowCustomer from './CustomerSupport/ShowCustomer';
+import EditCustomer from './CustomerSupport/EditCustomer';
+import DeleteCustomer from './CustomerSupport/DeleteCustomer';
+import CustomerCard from './CustomerSupport/CustomerCard.jsx';
+import CustomerSingleCard from './CustomerSupport/CustomerSingleCard.jsx';
+import CustomerTable from './CustomerSupport/CustomerTable.jsx'
+import CustomerOverview from "./CustomerSupport/CustomerOverview.jsx";
+import CustomerDashboard from "./CustomerSupport/CustomerDashboard.jsx"
+
 //online store 
 import AdminHome from './OnlineStore/pages/Home/AdminHome';
 import ManagerHome from './OnlineStore/pages/Home/managerHome';
@@ -134,6 +147,19 @@ function App() {
           <Route path="/dashboard/summery" element={<InventorySummaryReport />} />
           <Route path="/items/:id" element={<ItemDetailsssss/>} />
 
+          <Route path='/customer/create' element={<CreateCustomer />} />
+      <Route path='/customer/details/:id' element={<ShowCustomer />} />
+      <Route path='/customer/edit/:id' element={<EditCustomer />} />
+      <Route path='/customer/delete/:id' element={<DeleteCustomer />} />
+      <Route path='/dashboard/customer/details/:id' element={<ShowCustomer />} />
+      <Route path='/dashboard/customer/edit/:id' element={<EditCustomer />} />
+      <Route path='/dashboard/customer/delete/:id' element={<DeleteCustomer />} />
+      <Route path='/customer/card' element={<CustomerCard />} />
+      <Route path='/customer/single/:id' element={<CustomerSingleCard />} />
+      <Route path='/customer/table' element={<CustomerTable />} />
+      <Route path='/profile' element={<Profile />} />
+      <Route path="/dashboard/Customer/overview" element={<CustomerOverview/>}/>
+      <Route path="/dashboard/Customer/dashboard" element={<CustomerDashboard/>}/>
 
        
           

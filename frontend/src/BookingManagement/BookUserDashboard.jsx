@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BooksTable from "./BooksTable";
+import CustomerTable from "../CustomerSupport/CustomerTable";
 import BreakdownTable from "../BreakdownService/BreakdownTable";
 
 function BookUserDashboard() {
@@ -119,6 +120,7 @@ function BookUserDashboard() {
         <h1 className="text-2xl my-8">Ticket Details</h1>
       </div>
       <br />
+      <CustomerTable customer={filteredCustomers} loading={loadingBooks}/>
 
       {/* Breakdown Requests Section */}
       <div className="flex justify-between items-center">
