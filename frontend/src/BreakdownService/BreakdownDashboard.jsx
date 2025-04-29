@@ -3,6 +3,7 @@ import axios from "axios";
 import BreakdownCard from "./BreakdownCard";
 import Spinner from "../BookingManagement/Spinner";
 import BreakdownView from "./BreakdownView";
+import AddDriver from './AddDriver'; // Add this import at the top of the file
 
 function BreakdownDashboard() {
   const [breakdownRequests, setBreakdownRequests] = useState([]);
@@ -25,9 +26,11 @@ function BreakdownDashboard() {
   
   const renderComponent = () => {
     if (currentView === "overview") {
-      return <BreakdownView />; // Ensure BreakdownView is imported
+      return <BreakdownView />;
     } else if (currentView === "dashboard") {
-      return loading ? <Spinner /> : <BreakdownCard breakdownRequests={breakdownRequests} />; // Pass data to BreakdownCard
+      return loading ? <Spinner /> : <BreakdownCard breakdownRequests={breakdownRequests} />;
+    } else if (currentView === "addDriver") {
+      return <AddDriver />;
     }
   };
   
@@ -118,6 +121,39 @@ function BreakdownDashboard() {
         </span>
       </a>
     </nav>
+    <nav className="flex-1 space-y-2">
+  <a
+    href="#"
+    onClick={() => setCurrentView("addDriver")} // Set currentView to 'addDriver'
+    title="Add Driver"
+    className={`flex items-center px-4 py-2.5 text-sm font-medium ${
+      currentView === "addDriver" ? "bg-red-600" : "bg-white-200"
+    } transition-all duration-200 rounded-lg group`}
+  >
+    <svg
+      className={`flex-shrink-0 w-5 h-5 mr-4 ${
+        currentView === "addDriver" ? "text-white" : "text-black"
+      }`}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 4v16m8-8H4"
+      />
+    </svg>
+
+    <span
+      className={`${currentView === "addDriver" ? "text-white" : "text-black"}`}
+    >
+      Add Driver
+    </span>
+  </a>
+</nav>
   </div>
 </div>
 
