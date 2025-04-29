@@ -125,19 +125,25 @@ const AddItemForm = () => {
     <div className='flex'>
       <ManagerHeader />
       <div className="flex-1 relative min-h-screen">
-        {/* Animated Background */}
+        {/* Automotive Background with Overlay */}
         <div className="fixed inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-red-50 to-gray-100 animate-gradient-slow"></div>
-          <div className="absolute inset-0 opacity-50 bg-grid-pattern"></div>
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ 
+              backgroundImage: "url('/images/inventory-bg.jpg')", // Add this image to your public/images folder
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-red-900/50 to-gray-900/80 backdrop-blur-sm"/>
+          <div className="absolute inset-0 bg-grid-pattern opacity-20"/>
         </div>
 
         {/* Content */}
         <div className="relative z-10 p-8">
           <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent animate-shimmer">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent animate-shimmer">
               Add New Item
             </h1>
-            <p className="text-gray-600 mt-2">Enter the details of your new inventory item below</p>
+            <p className="text-gray-200 mt-2">Enter the details of your new inventory item below</p>
           </div>
 
           {error && (
@@ -146,7 +152,8 @@ const AddItemForm = () => {
             </div>
           )}
 
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+          {/* Update the form container background for better contrast */}
+          <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-gray-200/20">
             <div className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -7,18 +7,16 @@ export default {
   theme: {
     extend: {
       animation: {
-        'gradient-slow': 'gradient 8s linear infinite',
-        'shimmer': 'shimmer 2s linear infinite',
+        'gradient-slow': 'gradient 15s linear infinite',
+        'shimmer': 'shimmer 3s linear infinite',
       },
       keyframes: {
         gradient: {
           '0%, 100%': {
-            'background-size': '200% 200%',
-            'background-position': 'left center'
+            'background-position': '0% 50%',
           },
           '50%': {
-            'background-size': '200% 200%',
-            'background-position': 'right center'
+            'background-position': '100% 50%',
           },
         },
         shimmer: {
@@ -31,7 +29,7 @@ export default {
         },
       },
       backgroundImage: {
-        'grid-pattern': "linear-gradient(to right, rgba(255, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 0, 0, 0.05) 1px, transparent 1px)",
+        'grid-pattern': "linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
       },
       backgroundSize: {
         'grid': '20px 20px',
