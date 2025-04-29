@@ -74,71 +74,119 @@ const InventorySummaryReport = () => {
   return (
     <div className='flex'>
       <ManagerHeader />
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex justify-between mb-4">
-          <h1 className="text-2xl font-bold">Inventory Summary Report</h1>
+      <div className="container mx-auto px-4 py-8 bg-gray-50">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent mb-2">
+              Inventory Summary Report
+            </h1>
+            <p className="text-gray-600">
+              <span className="font-semibold">Report Generated:</span> {reportDateTime}
+            </p>
+          </div>
           <button
             onClick={handlePrint}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="mt-4 md:mt-0 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
-            Download as PDF
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download PDF
           </button>
         </div>
 
-        {/* Display the date and time when the report is generated */}
-        <div className="text-gray-700 mb-4">
-          <strong>Report Generated on:</strong> {reportDateTime}
-        </div>
-
-        <div ref={reportRef} className="bg-white p-6 rounded-lg shadow-lg">
+        <div ref={reportRef} className="space-y-8">
           {Object.keys(summary).map((category) => (
-            <div key={category} className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-700">{category}</h2>
-              <table className="table-auto w-full mt-4 border-collapse">
-                <thead>
-                  <tr className="bg-red-600 text-left">
-                    <th className="p-2">Item Name</th>
-                    <th className="p-2">Quantity</th>
-                    <th className="p-2">Buying Price (LKR)</th>
-                    <th className="p-2">Selling Price (LKR)</th>
-                    <th className="p-2">Total Cost (LKR)</th>
-                    <th className="p-2">Profit (LKR)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {summary[category].items.map((item, index) => (
-                    <tr
-                      key={index}
-                      className={`border-b ${item.qty < 3 ? 'bg-red-100' : ''}`}
-                    >
-                      <td className="text-gray-700">{item.name}</td>
-                      <td className="text-gray-700">{item.qty}</td>
-                      <td className="text-gray-700">{item.buyingPrice.toFixed(2)}</td>
-                      <td className="text-gray-700">{item.price.toFixed(2)}</td>
-                      <td className="text-gray-700">{item.total.toFixed(2)}</td>
-                      <td className="text-gray-700">{item.profit.toFixed(2)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="mt-4">
-                <p><strong>Category Total Cost: </strong>LKR {summary[category].categoryTotal.toFixed(2)}</p>
-                <p><strong>Category Total Profit: </strong>LKR {summary[category].categoryProfit.toFixed(2)}</p>
+            <div key={category} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="px-6 py-4 bg-gradient-to-r from-red-600 to-red-800">
+                <h2 className="text-xl font-bold text-white">{category}</h2>
+              </div>
+              
+              <div className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Item Name</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Quantity</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Buying Price (LKR)</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Selling Price (LKR)</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Total Cost (LKR)</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Profit (LKR)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {summary[category].items.map((item, index) => (
+                        <tr 
+                          key={index}
+                          className={`hover:bg-gray-50 transition-colors ${
+                            item.qty < 3 ? 'bg-red-50' : ''
+                          }`}
+                        >
+                          <td className="px-4 py-3 text-sm text-gray-600">{item.name}</td>
+                          <td className="px-4 py-3 text-sm">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              item.qty < 3 ? 'bg-red-100 text-red-800' : 
+                              item.qty < 10 ? 'bg-yellow-100 text-yellow-800' : 
+                              'bg-green-100 text-green-800'
+                            }`}>
+                              {item.qty}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-600">{item.buyingPrice.toFixed(2)}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600">{item.price.toFixed(2)}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600">{item.total.toFixed(2)}</td>
+                          <td className="px-4 py-3 text-sm font-medium text-green-600">{item.profit.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mt-6 p-4 bg-gray-50 rounded-xl space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-600">Category Total Cost:</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      LKR {summary[category].categoryTotal.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-600">Category Total Profit:</span>
+                    <span className="text-lg font-bold text-green-600">
+                      LKR {summary[category].categoryProfit.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
 
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold text-gray-700">Low Stock Items</h3>
-            <ul className="mt-2">
-              {items
-                .filter(item => item.qty < 3)
-                .map(item => (
-                  <li key={item._id} className="text-gray-700 border-b">
-                    {item.name} - Quantity: {item.qty}
-                  </li>
-                ))}
-            </ul>
+          {/* Low Stock Items Section */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="px-6 py-4 bg-red-600">
+              <h2 className="text-xl font-bold text-white">Low Stock Alert</h2>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {items
+                  .filter(item => item.qty < 3)
+                  .map(item => (
+                    <div 
+                      key={item._id} 
+                      className="bg-red-50 rounded-lg p-4 border border-red-100 flex justify-between items-center"
+                    >
+                      <div>
+                        <h3 className="font-medium text-red-800">{item.name}</h3>
+                        <p className="text-sm text-red-600">Quantity: {item.qty}</p>
+                      </div>
+                      <span className="text-xs font-bold bg-red-200 text-red-800 px-2 py-1 rounded-full">
+                        Low Stock
+                      </span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
           </div>
         </div>
       </div>

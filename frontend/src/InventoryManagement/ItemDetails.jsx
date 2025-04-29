@@ -79,155 +79,236 @@ const ItemDetailsssss = () => {
     setFormErrors({ ...formErrors, category: '' }); // Clear category error
   };
 
-  if (error) return <div>{error}</div>;
-  if (!item) return <div>Loading...</div>;
-
   return (
-    <div className="container mx-auto mt-10">
-      <h1 className="text-3xl font-bold mb-4">Item Details</h1>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
-        {item.photo && (
-          <img
-            src={`data:image/jpeg;base64,${item.photo}`}
-            className="w-full h-64 object-cover"
-            alt={item.name}
-          />
-        )}
-        <div className="p-6">
-          <h5 className="text-2xl font-semibold mb-2">{item.name}</h5>
-          <p className="text-gray-700 mb-1">Price: LKR {item.price.toFixed(2)}</p>
-          <p className="text-gray-700 mb-1">Quantity: {item.qty}</p>
-          <p className="text-gray-700 mb-1">Description: {item.description}</p>
-          <p className="text-gray-700 mb-1">Company: {item.companyName}</p>
-          <p className="text-gray-700 mb-1">Category: {item.category?.name || 'N/A'}</p>
-        </div>
+    <div className="relative min-h-screen">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-red-50 to-gray-100 animate-gradient-slow"></div>
+        <div className="absolute inset-0 opacity-50 bg-grid-pattern"></div>
       </div>
 
-      <div className="flex space-x-4">
-        <button
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </button>
-        <button
-          className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-          onClick={() => setShowModal(true)}
-        >
-          Update
-        </button>
-        <button
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          onClick={handleDelete}
-        >
-          Delete
-        </button>
-      </div>
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+          Item Details
+        </h1>
 
-      {/* Modal for updating the item */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded shadow-md w-full max-w-lg">
-            <h2 className="text-xl font-bold mb-4">Update Item</h2>
-            <form>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={updatedItem.name || ''}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded text-gray-700 ${formErrors.name ? 'border-red-500' : ''}`}
-                />
-                {formErrors.name && <span className="text-red-500 text-sm">{formErrors.name}</span>}
+        {error ? (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+            <p className="text-red-700">{error}</p>
+          </div>
+        ) : !item ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-600"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Column - Image and Basic Info */}
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              {item.photo && (
+                <div className="relative h-96 group">
+                  <img
+                    src={`data:image/jpeg;base64,${item.photo}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt={item.name}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              )}
+              <div className="p-8">
+                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+                  {item.name}
+                </h2>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Price</span>
+                    <span className="text-2xl font-bold text-red-600">LKR {item.price.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Stock</span>
+                    <span className={`px-4 py-1 rounded-full text-sm font-semibold ${
+                      item.qty < 3 ? 'bg-red-100 text-red-800' : 
+                      item.qty < 10 ? 'bg-yellow-100 text-yellow-800' : 
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      {item.qty} units
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Details and Actions */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl shadow-xl p-8">
+                <h3 className="text-xl font-semibold mb-4">Item Information</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm text-gray-500">Description</label>
+                    <p className="text-gray-800">{item.description}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-500">Company</label>
+                    <p className="text-gray-800">{item.companyName}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-500">Category</label>
+                    <p className="text-gray-800">{item.category?.name || 'N/A'}</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={updatedItem.price || ''}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded text-gray-700 ${formErrors.price ? 'border-red-500' : ''}`}
-                />
-                {formErrors.price && <span className="text-red-500 text-sm">{formErrors.price}</span>}
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Quantity</label>
-                <input
-                  type="number"
-                  name="qty"
-                  value={updatedItem.qty || ''}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded text-gray-700 ${formErrors.qty ? 'border-red-500' : ''}`}
-                />
-                {formErrors.qty && <span className="text-red-500 text-sm">{formErrors.qty}</span>}
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Description</label>
-                <input
-                  type="text"
-                  name="description"
-                  value={updatedItem.description || ''}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded text-gray-700 ${formErrors.description ? 'border-red-500' : ''}`}
-                />
-                {formErrors.description && <span className="text-red-500 text-sm">{formErrors.description}</span>}
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Company</label>
-                <input
-                  type="text"
-                  name="companyName"
-                  value={updatedItem.companyName || ''}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded text-gray-700 ${formErrors.companyName ? 'border-red-500' : ''}`}
-                />
-                {formErrors.companyName && <span className="text-red-500 text-sm">{formErrors.companyName}</span>}
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-1">Category</label>
-                <select
-                  name="category"
-                  value={updatedItem.category?._id || ''}
-                  onChange={handleCategoryChange}
-                  className={`w-full px-3 py-2 border rounded text-gray-700 ${formErrors.category ? 'border-red-500' : ''}`}
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-                {formErrors.category && <span className="text-red-500 text-sm">{formErrors.category}</span>}
-              </div>
-
-              <div className="flex justify-end">
+              <div className="flex gap-4">
                 <button
-                  type="button"
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
-                  onClick={handleUpdate}
+                  onClick={() => navigate(-1)}
+                  className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition-all duration-300"
                 >
                   Update
                 </button>
                 <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-                  onClick={() => setShowModal(false)}
+                  onClick={handleDelete}
+                  className="flex-1 px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300"
                 >
-                  Cancel
+                  Delete
                 </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Update Modal */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 m-4">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+                  Update Item
+                </h2>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <form className="space-y-6">
+                {/* Form Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={updatedItem.name || ''}
+                        onChange={handleInputChange}
+                        className={`mt-1 block w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
+                          formErrors.name ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                      />
+                      {formErrors.name && <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Price</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-3 text-gray-500">LKR</span>
+                        <input
+                          type="number"
+                          name="price"
+                          value={updatedItem.price || ''}
+                          onChange={handleInputChange}
+                          className={`mt-1 block w-full pl-12 pr-4 py-3 bg-gray-50 border-2 rounded-xl focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
+                            formErrors.price ? 'border-red-500' : 'border-gray-200'
+                          }`}
+                        />
+                      </div>
+                      {formErrors.price && <p className="text-red-500 text-sm mt-1">{formErrors.price}</p>}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Quantity</label>
+                      <input
+                        type="number"
+                        name="qty"
+                        value={updatedItem.qty || ''}
+                        onChange={handleInputChange}
+                        className={`mt-1 block w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
+                          formErrors.qty ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                      />
+                      {formErrors.qty && <p className="text-red-500 text-sm mt-1">{formErrors.qty}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Category</label>
+                      <select
+                        name="category"
+                        value={updatedItem.category?._id || ''}
+                        onChange={handleCategoryChange}
+                        className={`mt-1 block w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
+                          formErrors.category ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                      >
+                        <option value="">Select a category</option>
+                        {categories.map((cat) => (
+                          <option key={cat._id} value={cat._id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                      {formErrors.category && <p className="text-red-500 text-sm mt-1">{formErrors.category}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Full width fields */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Description</label>
+                  <textarea
+                    name="description"
+                    value={updatedItem.description || ''}
+                    onChange={handleInputChange}
+                    rows="3"
+                    className={`mt-1 block w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
+                      formErrors.description ? 'border-red-500' : 'border-gray-200'
+                    }`}
+                  />
+                  {formErrors.description && <p className="text-red-500 text-sm mt-1">{formErrors.description}</p>}
+                </div>
+
+                <div className="flex justify-end gap-4 mt-8">
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleUpdate}
+                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-300"
+                  >
+                    Update Item
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

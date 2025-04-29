@@ -37,52 +37,64 @@ const CategoryDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 p-6 flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-extrabold text-center mb-8 text-gray-900">Category Details</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+      <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+        Category Details
+      </h1>
 
-      {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+      {error && <div className="max-w-2xl mx-auto p-4 bg-red-50 border-l-4 border-red-500 rounded-lg mb-8">
+        <p className="text-red-700">{error}</p>
+      </div>}
 
       {category && (
-        <div className="bg-white p-8 rounded-lg shadow-2xl max-w-xl w-full">
-          <div className="mb-6">
-            <strong className="text-xl font-semibold text-gray-800">Category Code:</strong>
-            <p className="text-gray-600">{category.categoryCode}</p>
-          </div>
-          <div className="mb-6">
-            <strong className="text-xl font-semibold text-gray-800">Name:</strong>
-            <p className="text-gray-600">{category.name}</p>
-          </div>
-          <div className="mb-6">
-            <strong className="text-xl font-semibold text-gray-800">Description:</strong>
-            <p className="text-gray-600">{category.description}</p>
-          </div>
-          <div className="mb-6">
-            <strong className="text-xl font-semibold text-gray-800">Created At:</strong>
-            <p className="text-gray-600">{new Date(category.createdAt).toLocaleString()}</p>
-          </div>
-          <div className="mb-6">
-            <strong className="text-xl font-semibold text-gray-800">Updated At:</strong>
-            <p className="text-gray-600">{new Date(category.updatedAt).toLocaleString()}</p>
-          </div>
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="px-6 py-4 bg-gradient-to-r from-red-600 to-red-800">
+              <h2 className="text-2xl font-bold text-white">{category.name}</h2>
+              <p className="text-red-100 text-sm mt-1">Code: {category.categoryCode}</p>
+            </div>
 
-          <div className="flex justify-between mt-8">
-            <Link to="/catagory">
-              <button className="py-3 px-6 bg-gradient-to-r from-gray-600 to-gray-800 text-white font-semibold rounded-md shadow-lg hover:scale-105 transition-transform duration-300">
-                Back
-              </button>
-            </Link>
-            <button
-              onClick={handleUpdate}
-              className="py-3 px-6 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-md shadow-lg hover:scale-105 transition-transform duration-300"
-            >
-              Update
-            </button>
-            <button
-              onClick={handleDelete}
-              className="py-3 px-6 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-md shadow-lg hover:scale-105 transition-transform duration-300"
-            >
-              Delete
-            </button>
+            <div className="p-8">
+              <div className="grid gap-8 md:grid-cols-2">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Description</h3>
+                    <p className="mt-2 text-gray-900">{category.description}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Created At</h3>
+                    <p className="mt-2 text-gray-900">{new Date(category.createdAt).toLocaleString()}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">Last Updated</h3>
+                    <p className="mt-2 text-gray-900">{new Date(category.updatedAt).toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4 mt-8">
+                <Link to="/catagory">
+                  <button className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300">
+                    Back
+                  </button>
+                </Link>
+                <button
+                  onClick={handleUpdate}
+                  className="px-6 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition-all duration-300"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
