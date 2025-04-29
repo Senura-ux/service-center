@@ -70,7 +70,13 @@ function BookUserDashboard() {
     };
 
     if (userProfile) {
-      fetchBreakdownRequests(); // Only fetch breakdowns when the user profile is available
+      fetchBreakdownRequests(); // Initial fetch
+      
+      // Set up polling for updates
+      const intervalId = setInterval(fetchBreakdownRequests, 30000); // Poll every 30 seconds
+      
+      // Clean up interval when component unmounts
+      return () => clearInterval(intervalId);
     }
   }, [userProfile]);
 
