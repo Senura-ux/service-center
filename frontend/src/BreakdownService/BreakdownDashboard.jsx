@@ -14,7 +14,7 @@ function BreakdownDashboard() {
       .get("http://localhost:5555/breakdownRequests")
       .then((response) => {
         console.log(response.data);
-        setBreakdownRequests(response.data.data); // Corrected the state setting
+        setBreakdownRequests(response.data.data); 
         setLoading(false);
       })
       .catch((error) => {
