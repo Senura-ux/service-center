@@ -36,7 +36,7 @@ function LoginForm() {
       return;
     }
 
-    // Start login logic
+    
     setLoading(true);
 
     try {
