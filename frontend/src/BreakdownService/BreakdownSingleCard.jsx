@@ -47,30 +47,46 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
 
   const handleAssignDriver = async (event) => {
     const driverId = event.target.value;
+    if (!driverId) return;
+
     const selectedDriverData = drivers.find(driver => driver._id === driverId);
-    setSelectedDriver(driverId);
-  
-    localStorage.setItem(`selectedDriver_${breakdownRequest._id}`, driverId);
-  
+    if (!selectedDriverData) return;
+
     try {
-      const response = await axios.put(`http://localhost:5555/breakdownRequests/${breakdownRequest._id}/assign-driver`, {
-        assignedDriver: selectedDriverData.employeeName,
-      });
-  
-      alert(`Assigned ${selectedDriverData.employeeName} to ${breakdownRequest.customerName}`);
-      setDriverError(false); // Reset the error state if assignment is successful
-      localStorage.removeItem(`driverError_${breakdownRequest._id}`); // Clear error from localStorage
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        alert('This driver is already assigned to another active request. Please choose another driver.');
-        setSelectedDriver('Not Available'); // Set "Not Available" in the dropdown
-        setDriverError(true); // Indicate that the driver is unavailable
-        localStorage.setItem(`driverError_${breakdownRequest._id}`, 'true'); // Store error state in localStorage
-      } else {
-        console.error('Error assigning driver:', error);
+      // First check if driver has any existing assignments
+      const response = await axios.get('http://localhost:5555/breakdownRequests');
+      const existingAssignments = response.data.data.filter(request => 
+        request.assignedDriver === selectedDriverData.employeeName &&
+        (request.status === 'Accepted' || request.status === 'In Progress')
+      );
+
+      if (existingAssignments.length > 0) {
+        alert(`${selectedDriverData.employeeName} is currently assigned to another active request. Please wait until they complete their current assignment or choose another driver.`);
+        setSelectedDriver(''); // Reset selection
+        setDriverError(true);
+        localStorage.setItem(`driverError_${breakdownRequest._id}`, 'true');
+        return;
       }
+
+      // If no active assignments, proceed with assigning the driver
+      const assignResponse = await axios.put(
+        `http://localhost:5555/breakdownRequests/${breakdownRequest._id}/assign-driver`,
+        { assignedDriver: selectedDriverData.employeeName }
+      );
+
+      alert(`Successfully assigned ${selectedDriverData.employeeName} to ${breakdownRequest.customerName}`);
+      setSelectedDriver(driverId);
+      setDriverError(false);
+      localStorage.setItem(`selectedDriver_${breakdownRequest._id}`, driverId);
+      localStorage.removeItem(`driverError_${breakdownRequest._id}`);
+      
+    } catch (error) {
+      console.error('Error in driver assignment:', error);
+      alert('There was an error assigning the driver. Please try again.');
+      setSelectedDriver('');
+      setDriverError(true);
     }
-  };  
+  };
 
   const handleAccept = async () => {
     const selectedDriverData = drivers.find(driver => driver._id === selectedDriver);
