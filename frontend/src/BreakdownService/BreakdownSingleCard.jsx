@@ -14,7 +14,6 @@ import BreakdownReport from './BreakdownReport';
 const BreakdownSingleCard = ({ breakdownRequest }) => {
   const [showModal, setShowModal] = useState(false);
   const [drivers, setDrivers] = useState([]);
-  //const [assignedDrivers, setAssignedDrivers] = useState([]); // Track currently assigned drivers
   const [selectedDriver, setSelectedDriver] = useState('');
   const [status, setStatus] = useState(localStorage.getItem(`status_${breakdownRequest._id}`) || breakdownRequest.status || 'New');
   const [driverError, setDriverError] = useState(false); // Track driver assignment errors
@@ -100,18 +99,6 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleComplete = async () => {
-    setStatus('Completed');
-    localStorage.setItem(`status_${breakdownRequest._id}`, 'Completed');
-
-    updateStatusInDatabase('Completed');
-
-    const message = encodeURIComponent('Your request has been marked as completed.');
-    const phoneNumber = encodeURIComponent(breakdownRequest.contactNumber);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
   const updateStatusInDatabase = async (newStatus) => {
     try {
       await axios.patch(`http://localhost:5555/breakdownRequests/${breakdownRequest._id}/status`, {
@@ -153,7 +140,7 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
         <h2 className="my-1">{breakdownRequest.contactNumber}</h2>
       </div>
 
-      <div className="mt-4 flex justify-between">
+      <div className="mt-4 flex justify-center gap-x-8">
         <div
           onClick={handleAccept}
           className="bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out"
@@ -168,15 +155,6 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
           className="bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-700 transition duration-300 ease-in-out"
           style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           title="Decline"
-        >
-          <BsInfoCircle className="text-white text-xl" />
-        </div>
-
-        <div
-          onClick={handleComplete}
-          className="bg-yellow-300 text-white p-2 rounded-full cursor-pointer hover:bg-yellow-700 transition duration-300 ease-in-out"
-          style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          title="Complete"
         >
           <BsInfoCircle className="text-white text-xl" />
         </div>
