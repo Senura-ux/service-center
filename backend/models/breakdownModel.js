@@ -28,8 +28,8 @@ const breakdownRequestSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['New', 'Accepted', 'Declined', 'Completed'],
-      default: 'New', // Default status is "New"
+      enum: ['New', 'Accepted', 'In Progress', 'Declined', 'Completed'],
+      default: 'New',
     },
     totalDistance: {
       type: Number,
