@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../BookingManagement/Spinner";
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { BsEyeFill } from 'react-icons/bs';
 import { useSnackbar } from 'notistack';
 
 const EmployeeList = ({ position }) => {
@@ -11,6 +12,9 @@ const EmployeeList = ({ position }) => {
   const [driverToDelete, setDriverToDelete] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [driverToEdit, setDriverToEdit] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState(null);
+  const [driverStatus, setDriverStatus] = useState({ status: 'free', requestId: null });
   const { enqueueSnackbar } = useSnackbar();
 
   const [editForm, setEditForm] = useState({
@@ -227,6 +231,34 @@ const EmployeeList = ({ position }) => {
     }
   };
 
+  const handleView = async (driver) => {
+    setSelectedDriver(driver);
+    // Check if driver is assigned to any active breakdown request
+    try {
+      const response = await axios.get('http://localhost:5555/breakdownRequests');
+      const activeRequest = response.data.data.find(
+        request => request.assignedDriver === driver.employeeName && 
+        ['New', 'Accepted', 'In Progress'].includes(request.status)
+      );
+      
+      if (activeRequest) {
+        setDriverStatus({
+          status: 'assigned',
+          requestId: activeRequest._id
+        });
+      } else {
+        setDriverStatus({
+          status: 'free',
+          requestId: null
+        });
+      }
+      setShowViewModal(true);
+    } catch (error) {
+      console.error('Error checking driver status:', error);
+      enqueueSnackbar('Error checking driver status', { variant: 'error' });
+    }
+  };
+
   if (loading) return <Spinner />;
 
   return (
@@ -256,6 +288,10 @@ const EmployeeList = ({ position }) => {
                 <td className="py-3 px-4">{employee.email}</td>
                 <td className="py-3 px-4">
                   <div className="flex gap-2">
+                    <BsEyeFill
+                      className="text-xl text-green-500 hover:text-green-700 cursor-pointer"
+                      onClick={() => handleView(employee)}
+                    />
                     <AiOutlineEdit 
                       className="text-xl text-blue-500 hover:text-blue-700 cursor-pointer"
                       onClick={() => handleEdit(employee)}
@@ -430,6 +466,69 @@ const EmployeeList = ({ position }) => {
                 onClick={handleDelete}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Modal */}
+      {showViewModal && selectedDriver && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4">Driver Details</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="font-medium">Name:</span>
+                <span>{selectedDriver.employeeName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Email:</span>
+                <span>{selectedDriver.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Contact:</span>
+                <span>{selectedDriver.contactNo}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">License No:</span>
+                <span>{selectedDriver.licenseNo}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Age:</span>
+                <span>{selectedDriver.Age}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Experience:</span>
+                <span>{new Date().getFullYear() - selectedDriver.joinedYear} years</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Joined Year:</span>
+                <span>{selectedDriver.joinedYear}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Salary:</span>
+                <span>Rs. {selectedDriver.salary}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t">
+                <span className="font-medium">Current Status:</span>
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  driverStatus.status === 'assigned' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                }`}>
+                  {driverStatus.status === 'assigned' ? (
+                    <>
+                      Assigned to Request #{driverStatus.requestId?.slice(-5)}
+                    </>
+                  ) : 'Available'}
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-end mt-6">
+              <button
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+                onClick={() => setShowViewModal(false)}
+              >
+                Close
               </button>
             </div>
           </div>
