@@ -164,7 +164,7 @@ router.patch("/:id/status", async (req, res) => {
     const { status } = req.body;
 
     // Validate status
-    const validStatuses = ['New', 'Accepted', 'Declined', 'Completed'];
+    const validStatuses = ['New', 'Accepted', 'In Progress', 'Declined', 'Completed'];
     if (!validStatuses.includes(status)) {
       return res.status(400).send({ message: 'Invalid status' });
     }

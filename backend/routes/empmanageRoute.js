@@ -289,5 +289,46 @@ router.delete("/:id", async (request, response) => {
   }
 });
 
+// Add this route to your empmanageRoute.js file
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find employee by email
+    const employee = await empmanageRequest.findOne({ email });
+    
+    if (!employee) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    // Check if this is a driver
+    if (employee.position !== 'driver') {
+      return res.status(401).json({ success: false, message: 'Not a driver account' });
+    }
+
+    // Check if password matches
+    if (employee.password !== password) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    // Return success with driver info
+    res.status(200).json({
+      success: true,
+      message: 'Driver login successful',
+      employee: {
+        _id: employee._id,
+        employeeName: employee.employeeName,
+        email: employee.email,
+        position: employee.position,
+        contactNo: employee.contactNo,
+        licenseNo: employee.licenseNo
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 
 export default router;
