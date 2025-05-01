@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BiUserCircle, BiShow, BiCar, BiPhone } from 'react-icons/bi';
+import { BiUserCircle, BiCar, BiPhone } from 'react-icons/bi';
 import { AiFillInfoCircle, AiOutlineEdit } from 'react-icons/ai';
-import { Bs0Circle, Bs1Circle, BsArrowRightCircle, BsBadge3D, BsBox, BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineDelete } from 'react-icons/md';
 import { useState, useEffect } from 'react';
 import BreakdownModal from './BreakdownModal';
@@ -88,33 +87,6 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
     }
   };
 
-  const handleAccept = async () => {
-    const selectedDriverData = drivers.find(driver => driver._id === selectedDriver);
-    const driverName = selectedDriverData ? selectedDriverData.employeeName : 'a driver';
-
-    setStatus('Accepted');
-    localStorage.setItem(`status_${breakdownRequest._id}`, 'Accepted');
-
-    updateStatusInDatabase('Accepted');
-
-    const message = encodeURIComponent(`Your request has been confirmed. Assigned Driver: ${driverName}`);
-    const phoneNumber = encodeURIComponent(breakdownRequest.contactNumber);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const handleDecline = async () => {
-    setStatus('Declined');
-    localStorage.setItem(`status_${breakdownRequest._id}`, 'Declined');
-
-    updateStatusInDatabase('Declined');
-
-    const message = encodeURIComponent('Your request has been declined. Try again.');
-    const phoneNumber = encodeURIComponent(breakdownRequest.contactNumber);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
   const updateStatusInDatabase = async (newStatus) => {
     try {
       await axios.patch(`http://localhost:5555/breakdownRequests/${breakdownRequest._id}/status`, {
@@ -156,33 +128,13 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
         <h2 className="my-1">{breakdownRequest.contactNumber}</h2>
       </div>
 
-      <div className="mt-4 flex justify-center gap-x-8">
-        <div
-          onClick={handleAccept}
-          className="bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out"
-          style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          title="Accept"
-        >
-          <BsInfoCircle className="text-white text-xl" />
-        </div>
-
-        <div
-          onClick={handleDecline}
-          className="bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-700 transition duration-300 ease-in-out"
-          style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          title="Decline"
-        >
-          <BsInfoCircle className="text-white text-xl" />
-        </div>
-      </div>
-
       <div className="mt-4">
         <label className="text-lg font-semibold">Assign Driver:</label>
         <select
           value={selectedDriver}
           onChange={handleAssignDriver}
-          className={`border rounded px-2 py-1 ${driverError ? 'bg-yellow-200' : ''}`} // Change background if error
-          style={{ width: '200px', maxWidth: '100%' }} // Set a specific width for the dropdown
+          className={`border rounded px-2 py-1 ${driverError ? 'bg-yellow-200' : ''}`}
+          style={{ width: '200px', maxWidth: '100%' }}
         >
           <option value="">Select a driver</option>
           {drivers.map((driver) => (
