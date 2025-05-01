@@ -70,12 +70,12 @@ function LoginForm() {
           navigate("/dashboard/finance/dashboard");
         } else if (email === "hrManager@gmail.com") {
           navigate("/dashboard/emp/home");
-        } else if (email === "supportAdmin@gmail.com") {
-          navigate("/dashboard/Customer/dashboard");
-        } else if (email === "breakdownAdmin@gmail.com") {
+        } else if (email === "breakdownAdmin@gmail.com"){
           navigate("/dashboard/breakdown/dashboard");
         } else if (email === "vehicleAdmin@gmail.com") {
           navigate("/dashboard/vehicle/dashboard");
+        }else if (email === "supportAdmin@gmail.com") {
+          navigate("/dashboard/Customer/dashboard");
         } else {
           navigate("/");
         }
