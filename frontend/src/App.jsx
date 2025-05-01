@@ -1,4 +1,4 @@
-import {Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { useState } from 'react';
 import Home from "./Home/Home";
@@ -81,7 +81,8 @@ import EditRequest from './BreakdownService/EditRequest';
 import DeleteRequest from './BreakdownService/DeleteRequest';
 import BreakdownCard from './BreakdownService/BreakdownCard';
 import BreakdownView from "./BreakdownService/BreakdownView";
-import BreakdownDashboard from "./BreakdownService/BreakdownDashboard.jsx"
+import BreakdownDashboard from "./BreakdownService/BreakdownDashboard.jsx";
+import DriverDashboard from "./BreakdownService/DriverDashboard.jsx";
 
 
 function App() {
@@ -96,8 +97,8 @@ function App() {
     <>
       {!isDashboardRoute && <Header />} {/* Render Header if not on dashboard route */}
       {isDashboardRoute && <DashboardHeader />}
-     
-      
+
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/books/create" element={<CreateBook />} />
@@ -113,79 +114,79 @@ function App() {
         <Route path="/profile" element={<BookUserDashboard />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/dashboard/Bookadmin" element={<Bookadmin/>}/>
-        <Route path="/dashboard/header" element={<dashboardHeader/>}/>
-        <Route path="/dashboard/books/overview" element={<BookOverview/>}/>
+        <Route path="/dashboard/Bookadmin" element={<Bookadmin />} />
+        <Route path="/dashboard/header" element={<dashboardHeader />} />
+        <Route path="/dashboard/books/overview" element={<BookOverview />} />
         <Route path="/dashboard/books/create" element={<CreateBook />} />
 
-          <Route path="/items" element={<ItemList />} />
-          <Route path="/salesmanager" element={<AdminHome/>} />
-          <Route path="/adminhome" element={<AdminHome />} />
-          <Route path="/managerhome" element={<ManagerHome />} />
-          <Route path="/inventory" element ={<ItemList />}/>
-          <Route path="/updateItem/:id" element={<UpdateItem />} />
-          <Route path="/orderlist" element={<OrderList />}/>
-          <Route path ="/checkout" element={<Checkout cart={cart} setCart={setCart} />} />
-          <Route path="/store-items/:itemId" element={<ItemDetails cart={cart} setCart={setCart} />} />
-          <Route path="/Store" element={<Store cart={cart} setCart={setCart} />} />
-          <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-          <Route path="/orders" element={<OrderList />} />
-          <Route path="/orders/:orderId" element={<OrderDetails />} />
-          <Route path="/CardManagementPage" element={<CardManagementPage />} />
-          <Route path="/my-orders" element={<MyOrders />} />
-          <Route path="/cancel" element={<CancelledOrders />} />
-          <Route path="/finish" element={<CompletedOrders />} />
-          <Route path="/report" element={<SalesSummary />} />
-          <Route path="/pending" element={<PendingOrders />} />
+        <Route path="/items" element={<ItemList />} />
+        <Route path="/salesmanager" element={<AdminHome />} />
+        <Route path="/adminhome" element={<AdminHome />} />
+        <Route path="/managerhome" element={<ManagerHome />} />
+        <Route path="/inventory" element={<ItemList />} />
+        <Route path="/updateItem/:id" element={<UpdateItem />} />
+        <Route path="/orderlist" element={<OrderList />} />
+        <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} />} />
+        <Route path="/store-items/:itemId" element={<ItemDetails cart={cart} setCart={setCart} />} />
+        <Route path="/Store" element={<Store cart={cart} setCart={setCart} />} />
+        <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
+        <Route path="/orders" element={<OrderList />} />
+        <Route path="/orders/:orderId" element={<OrderDetails />} />
+        <Route path="/CardManagementPage" element={<CardManagementPage />} />
+        <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/cancel" element={<CancelledOrders />} />
+        <Route path="/finish" element={<CompletedOrders />} />
+        <Route path="/report" element={<SalesSummary />} />
+        <Route path="/pending" element={<PendingOrders />} />
 
-          <Route path="/dashboard/senura" element ={<SenuraInventoryItems />}/>
-          <Route path="/dashboard/addcatagory" element ={<AddCategoryForm />}/>
-          <Route path="/dashboard/catagory" element ={<CategoriesList />}/>
-          <Route path="/dashboard/additem" element ={<AddItemForm />}/>
-          <Route path="/categories/:id" element={<CategoryDetail />} />
-          <Route path="/categories/:id/edit" element={<UpdateCategory />} />
-          <Route path="/dashboard/summery" element={<InventorySummaryReport />} />
-          <Route path="/items/:id" element={<ItemDetailsssss/>} />
+        <Route path="/dashboard/senura" element={<SenuraInventoryItems />} />
+        <Route path="/dashboard/addcatagory" element={<AddCategoryForm />} />
+        <Route path="/dashboard/catagory" element={<CategoriesList />} />
+        <Route path="/dashboard/additem" element={<AddItemForm />} />
+        <Route path="/categories/:id" element={<CategoryDetail />} />
+        <Route path="/categories/:id/edit" element={<UpdateCategory />} />
+        <Route path="/dashboard/summery" element={<InventorySummaryReport />} />
+        <Route path="/items/:id" element={<ItemDetailsssss />} />
 
-          <Route path='/customer/create' element={<CreateCustomer />} />
-      <Route path='/customer/details/:id' element={<ShowCustomer />} />
-      <Route path='/customer/edit/:id' element={<EditCustomer />} />
-      <Route path='/customer/delete/:id' element={<DeleteCustomer />} />
-      <Route path='/dashboard/customer/details/:id' element={<ShowCustomer />} />
-      <Route path='/dashboard/customer/edit/:id' element={<EditCustomer />} />
-      <Route path='/dashboard/customer/delete/:id' element={<DeleteCustomer />} />
-      <Route path='/customer/card' element={<CustomerCard />} />
-      <Route path='/customer/single/:id' element={<CustomerSingleCard />} />
-      <Route path='/customer/table' element={<CustomerTable />} />
-      <Route path='/profile' element={<Profile />} />
-      <Route path="/dashboard/Customer/overview" element={<CustomerOverview/>}/>
-      <Route path="/dashboard/Customer/dashboard" element={<CustomerDashboard/>}/>
+        <Route path='/customer/create' element={<CreateCustomer />} />
+        <Route path='/customer/details/:id' element={<ShowCustomer />} />
+        <Route path='/customer/edit/:id' element={<EditCustomer />} />
+        <Route path='/customer/delete/:id' element={<DeleteCustomer />} />
+        <Route path='/dashboard/customer/details/:id' element={<ShowCustomer />} />
+        <Route path='/dashboard/customer/edit/:id' element={<EditCustomer />} />
+        <Route path='/dashboard/customer/delete/:id' element={<DeleteCustomer />} />
+        <Route path='/customer/card' element={<CustomerCard />} />
+        <Route path='/customer/single/:id' element={<CustomerSingleCard />} />
+        <Route path='/customer/table' element={<CustomerTable />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path="/dashboard/Customer/overview" element={<CustomerOverview />} />
+        <Route path="/dashboard/Customer/dashboard" element={<CustomerDashboard />} />
 
-       
-          
 
-        <Route path='/dashboard/emp' element={<DashboardEmp /> }>
-        <Route path='/dashboard/emp/home' element={<HomeEmp />}></Route>
-         <Route path='/dashboard/emp/employee' element={<Employee />}> </Route>
-        <Route path='/dashboard/emp/shiftschedular' element={<Shiftschedular  />}></Route>
-        <Route path='/dashboard/emp/profile' element={<Profile />}></Route>
-        <Route path='/dashboard/emp/add_shifts' element={<AddShifts/>}></Route>
-        <Route path='/dashboard/emp/add_employee' element={<CreateRecords />}></Route>
-        <Route path='/dashboard/emp/edit_employee/:id' element={<EditRecord />}></Route>
-        <Route path='/dashboard/emp/delete_employee/:id' element={<DeleteRecord />}></Route>
+
+
+        <Route path='/dashboard/emp' element={<DashboardEmp />}>
+          <Route path='/dashboard/emp/home' element={<HomeEmp />}></Route>
+          <Route path='/dashboard/emp/employee' element={<Employee />}> </Route>
+          <Route path='/dashboard/emp/shiftschedular' element={<Shiftschedular />}></Route>
+          <Route path='/dashboard/emp/profile' element={<Profile />}></Route>
+          <Route path='/dashboard/emp/add_shifts' element={<AddShifts />}></Route>
+          <Route path='/dashboard/emp/add_employee' element={<CreateRecords />}></Route>
+          <Route path='/dashboard/emp/edit_employee/:id' element={<EditRecord />}></Route>
+          <Route path='/dashboard/emp/delete_employee/:id' element={<DeleteRecord />}></Route>
         </Route>
 
-      <Route path='/breakdownRequests/create' element={<CreateRequest />} />
+        <Route path='/breakdownRequests/create' element={<CreateRequest />} />
         <Route path='/breakdownRequests/details/:id' element={<ShowRequest />} />
         <Route path='/breakdownRequests/edit/:id' element={<EditRequest />} />
         <Route path='/breakdownRequests/delete/:id' element={<DeleteRequest />} />
         <Route path='/dashboard/breakdownRequests/details/:id' element={<ShowRequest />} />
         <Route path='/dashboard/breakdownRequests/edit/:id' element={<EditRequest />} />
         <Route path='/dashboard/breakdownRequests/delete/:id' element={<DeleteRequest />} />
-        <Route path="/dashboard/BreakdownView" element={<BreakdownView/>}/>
-        <Route path="/dashboard/breakdownAdmin" element={<BreakdownCard/>}/>
-        <Route path="/dashboard/breakdown/dashboard" element={<BreakdownDashboard/>}/>
-
+        <Route path="/dashboard/BreakdownView" element={<BreakdownView />} />
+        <Route path="/dashboard/breakdownAdmin" element={<BreakdownCard />} />
+        <Route path="/dashboard/breakdown/dashboard" element={<BreakdownDashboard />} />
+        <Route path="/dashboard/breakdown/driver" element={<DriverDashboard />} />
 
 
 
@@ -194,7 +195,7 @@ function App() {
       </Routes>
 
       {!isDashboardRoute && <Footer />}
-       {/* Render Footer if not on dashboard route */}
+      {/* Render Footer if not on dashboard route */}
     </>
   );
 }
