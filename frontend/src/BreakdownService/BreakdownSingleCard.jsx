@@ -105,6 +105,10 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
     Declined: 'bg-red-500 text-white'
   };
 
+  const isDriverAssignmentDisabled = () => {
+    return ['Accepted', 'In Progress', 'Completed'].includes(status);
+  };
+
   useEffect(() => {
     // Listen for status updates
     const checkStatus = async () => {
@@ -154,7 +158,9 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
         <select
           value={selectedDriver}
           onChange={handleAssignDriver}
-          className={`border rounded px-2 py-1 ${driverError ? 'bg-yellow-200' : ''}`}
+          disabled={isDriverAssignmentDisabled()}
+          className={`border rounded px-2 py-1 ${driverError ? 'bg-yellow-200' : ''} 
+            ${isDriverAssignmentDisabled() ? 'bg-gray-100 cursor-not-allowed' : ''}`}
           style={{ width: '200px', maxWidth: '100%' }}
         >
           <option value="">Select a driver</option>
