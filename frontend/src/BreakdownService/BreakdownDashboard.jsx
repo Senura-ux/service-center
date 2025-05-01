@@ -5,6 +5,7 @@ import Spinner from "../BookingManagement/Spinner";
 import BreakdownView from "./BreakdownView";
 import AddDriver from './AddDriver';
 import DriverDashboard from './DriverDashboard'; // Import the new component
+import EmployeeList from './EmployeeList'; // Import the EmployeeList component
 
 function BreakdownDashboard() {
   const [breakdownRequests, setBreakdownRequests] = useState([]);
@@ -34,6 +35,8 @@ function BreakdownDashboard() {
       return <AddDriver />;
     } else if (currentView === "driverView") {
       return <DriverDashboard />;
+    } else if (currentView === "drivers") {
+      return <EmployeeList position="driver" />;
     }
   };
   
@@ -157,18 +160,18 @@ function BreakdownDashboard() {
     </span>
   </a>
 </nav>
-{/* <nav className="flex-1 space-y-2">
+<nav className="flex-1 space-y-2">
   <a
     href="#"
-    onClick={() => setCurrentView("driverView")}
-    title="Driver Dashboard"
+    onClick={() => setCurrentView("drivers")}
+    title="Drivers"
     className={`flex items-center px-4 py-2.5 text-sm font-medium ${
-      currentView === "driverView" ? "bg-red-600" : "bg-white-200"
+      currentView === "drivers" ? "bg-red-600" : "bg-white-200"
     } transition-all duration-200 rounded-lg group`}
   >
     <svg
       className={`flex-shrink-0 w-5 h-5 mr-4 ${
-        currentView === "driverView" ? "text-white" : "text-black"
+        currentView === "drivers" ? "text-white" : "text-black"
       }`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -179,17 +182,16 @@ function BreakdownDashboard() {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
       />
     </svg>
-
     <span
-      className={`${currentView === "driverView" ? "text-white" : "text-black"}`}
+      className={`${currentView === "drivers" ? "text-white" : "text-black"}`}
     >
-      Driver Dashboard
+      Drivers
     </span>
   </a>
-</nav> */}
+</nav>
   </div>
 </div>
 
