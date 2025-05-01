@@ -98,11 +98,32 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
   };
 
   const statusColorClasses = {
-    New: 'bg-green-500 text-white',
+    New: 'bg-purple-500 text-white',
     Accepted: 'bg-blue-500 text-white',
-    Declined: 'bg-red-500 text-white',
-    Completed: 'bg-yellow-300 text-white',
+    'In Progress': 'bg-yellow-500 text-white',
+    Completed: 'bg-green-500 text-white',
+    Declined: 'bg-red-500 text-white'
   };
+
+  useEffect(() => {
+    // Listen for status updates
+    const checkStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5555/breakdownRequests/${breakdownRequest._id}`);
+        const currentStatus = response.data.status;
+        if (currentStatus !== status) {
+          setStatus(currentStatus);
+          localStorage.setItem(`status_${breakdownRequest._id}`, currentStatus);
+        }
+      } catch (error) {
+        console.error('Error fetching status:', error);
+      }
+    };
+
+    // Check status every 30 seconds
+    const intervalId = setInterval(checkStatus, 30000);
+    return () => clearInterval(intervalId);
+  }, [breakdownRequest._id, status]);
 
   return (
     <div
