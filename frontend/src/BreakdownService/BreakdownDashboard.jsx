@@ -3,6 +3,8 @@ import axios from "axios";
 import BreakdownCard from "./BreakdownCard";
 import Spinner from "../BookingManagement/Spinner";
 import BreakdownView from "./BreakdownView";
+import AddDriver from './AddDriver';
+import DriverDashboard from './DriverDashboard'; // Import the new component
 
 function BreakdownDashboard() {
   const [breakdownRequests, setBreakdownRequests] = useState([]);
@@ -14,20 +16,24 @@ function BreakdownDashboard() {
       .get("http://localhost:5555/breakdownRequests")
       .then((response) => {
         console.log(response.data);
-        setBreakdownRequests(response.data.data); // Corrected the state setting
+        setBreakdownRequests(response.data.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching breakdown requests:", error); // Improved error logging
+        console.error("Error fetching breakdown requests:", error);
         setLoading(false);
       });
   }, []);
   
   const renderComponent = () => {
     if (currentView === "overview") {
-      return <BreakdownView />; // Ensure BreakdownView is imported
+      return <BreakdownView />;
     } else if (currentView === "dashboard") {
-      return loading ? <Spinner /> : <BreakdownCard breakdownRequests={breakdownRequests} />; // Pass data to BreakdownCard
+      return loading ? <Spinner /> : <BreakdownCard breakdownRequests={breakdownRequests} />;
+    } else if (currentView === "addDriver") {
+      return <AddDriver />;
+    } else if (currentView === "driverView") {
+      return <DriverDashboard />;
     }
   };
   
@@ -118,6 +124,72 @@ function BreakdownDashboard() {
         </span>
       </a>
     </nav>
+    <nav className="flex-1 space-y-2">
+  <a
+    href="#"
+    onClick={() => setCurrentView("addDriver")} // Set currentView to 'addDriver'
+    title="Add Driver"
+    className={`flex items-center px-4 py-2.5 text-sm font-medium ${
+      currentView === "addDriver" ? "bg-red-600" : "bg-white-200"
+    } transition-all duration-200 rounded-lg group`}
+  >
+    <svg
+      className={`flex-shrink-0 w-5 h-5 mr-4 ${
+        currentView === "addDriver" ? "text-white" : "text-black"
+      }`}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 4v16m8-8H4"
+      />
+    </svg>
+
+    <span
+      className={`${currentView === "addDriver" ? "text-white" : "text-black"}`}
+    >
+      Add Driver
+    </span>
+  </a>
+</nav>
+{/* <nav className="flex-1 space-y-2">
+  <a
+    href="#"
+    onClick={() => setCurrentView("driverView")}
+    title="Driver Dashboard"
+    className={`flex items-center px-4 py-2.5 text-sm font-medium ${
+      currentView === "driverView" ? "bg-red-600" : "bg-white-200"
+    } transition-all duration-200 rounded-lg group`}
+  >
+    <svg
+      className={`flex-shrink-0 w-5 h-5 mr-4 ${
+        currentView === "driverView" ? "text-white" : "text-black"
+      }`}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+
+    <span
+      className={`${currentView === "driverView" ? "text-white" : "text-black"}`}
+    >
+      Driver Dashboard
+    </span>
+  </a>
+</nav> */}
   </div>
 </div>
 
