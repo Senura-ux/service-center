@@ -53,7 +53,7 @@ function LoginForm() {
           localStorage.setItem('user', JSON.stringify({ username, token, userId, email, password }));
           enqueueSnackbar("Login Successful", { variant: "success" });
 
-          // Navigation logic for different users
+          // Admin redirections
           if (email === "bookingAdmin@gmail.com") {
             navigate("/dashboard/Bookadmin");
           } else if (email === "salesmanager@gmail.com") {
@@ -64,32 +64,61 @@ function LoginForm() {
             navigate("/dashboard/finance/dashboard");
           } else if (email === "hrManager@gmail.com") {
             navigate("/dashboard/emp/home");
+          } else if (email === "supportAdmin@gmail.com") {
+            navigate("/dashboard/Customer/dashboard");
           } else if (email === "breakdownAdmin@gmail.com") {
             navigate("/dashboard/breakdown/dashboard");
           } else if (email === "vehicleAdmin@gmail.com") {
             navigate("/dashboard/vehicle/dashboard");
-          } else if (email === "supportAdmin@gmail.com") {
-            navigate("/dashboard/Customer/dashboard");
           } else {
             navigate("/");
           }
-
-          // Refresh the page
+          
           window.location.reload();
-        } else {
-          enqueueSnackbar("Invalid email or password", { variant: "error" });
+          return;
         }
-        
-      } catch (error) {
-        enqueueSnackbar("Login failed. Please check your credentials.", { variant: "error" });
-      } finally {
-        setLoading(false);
+      } catch (userError) {
+        // If regular user login fails, try employee login (for drivers)
+        try {
+          // Try to login as a driver
+          const driverResponse = await axios.post("http://localhost:5555/empmanageRequests/login", {
+            email,
+            password,
+          });
+
+          if (driverResponse.status === 200 && driverResponse.data.success) {
+            const { employeeName, _id: userId, position } = driverResponse.data.employee;
+            
+            // Store driver information in localStorage
+            localStorage.setItem('user', JSON.stringify({
+              username: employeeName,
+              userId,
+              email,
+              position,
+              isDriver: true
+            }));
+            
+            enqueueSnackbar("Driver Login Successful", { variant: "success" });
+            
+            // Redirect to the driver dashboard
+            navigate("/dashboard/breakdown/driver");
+            window.location.reload();
+            return;
+          }
+        } catch (driverError) {
+          console.error("Driver login error:", driverError);
+        }
       }
+      
+      // If we get here, both login attempts failed
+      enqueueSnackbar("Invalid email or password", { variant: "error" });
+      
     } catch (error) {
-      // Handle error if login fails
-      setLoading(false);
       enqueueSnackbar("Login failed. Please check your credentials.", { variant: "error" });
+    } finally {
+      setLoading(false);
     }
+  };
 
   // Rest of your component remains the same
   return (
