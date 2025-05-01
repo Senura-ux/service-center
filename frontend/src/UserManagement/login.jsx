@@ -49,7 +49,7 @@ function LoginForm() {
 
         if (response.status === 200) {
           const { token, username, _id: userId } = response.data;
-
+          
           localStorage.setItem('user', JSON.stringify({ username, token, userId, email, password }));
           enqueueSnackbar("Login Successful", { variant: "success" });
 
@@ -122,53 +122,53 @@ function LoginForm() {
 
   // Rest of your component remains the same
   return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        {loading && <Spinner />}
-        <div className="flex flex-col max-w-lg w-full bg-white shadow-md rounded-lg p-8">
-          <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Login</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      {loading && <Spinner />}
+      <div className="flex flex-col max-w-lg w-full bg-white shadow-md rounded-lg p-8">
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Login</h1>
 
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border-2 border-gray-300 px-4 py-2 w-full mt-2 rounded-lg focus:outline-none focus:border-red-500 transition-all duration-200"
-              placeholder="Enter your email"
-              aria-describedby="emailHelp"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-lg font-medium text-gray-700">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border-2 border-gray-300 px-4 py-2 w-full mt-2 rounded-lg focus:outline-none focus:border-red-500 transition-all duration-200"
-              placeholder="Enter your password"
-            />
-          </div>
-
-          <button
-            onClick={handleLogin}
-            className="bg-red-600 text-white font-semibold text-lg py-3 mt-4 rounded-lg hover:bg-red-700 transition-all duration-200 ease-in-out disabled:opacity-50"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-
-          <p className="text-center text-gray-600 mt-6">
-            Don't have an account?
-            <a href="/Register" className="text-red-600 hover:underline ml-1 transition-all duration-200 ease-in-out">
-              Sign up
-            </a>
-          </p>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border-2 border-gray-300 px-4 py-2 w-full mt-2 rounded-lg focus:outline-none focus:border-red-500 transition-all duration-200"
+            placeholder="Enter your email"
+            aria-describedby="emailHelp"
+          />
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-lg font-medium text-gray-700">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border-2 border-gray-300 px-4 py-2 w-full mt-2 rounded-lg focus:outline-none focus:border-red-500 transition-all duration-200"
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <button
+          onClick={handleLogin}
+          className="bg-red-600 text-white font-semibold text-lg py-3 mt-4 rounded-lg hover:bg-red-700 transition-all duration-200 ease-in-out disabled:opacity-50"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        <p className="text-center text-gray-600 mt-6">
+          Don't have an account? 
+          <a href="/Register" className="text-red-600 hover:underline ml-1 transition-all duration-200 ease-in-out">
+            Sign up
+          </a>
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
 export default LoginForm;
