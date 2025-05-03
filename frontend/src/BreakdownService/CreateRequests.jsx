@@ -168,76 +168,137 @@ const CreateRequests = () => {
   };
 
   return (
-    <div style={{ padding: '16px', backgroundColor: '#f0f4f8' }}>
+    <div style={{ 
+      padding: '32px', 
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+    }}>
       <BackButton />
-    
       {loading && <Spinner />}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        border: '2px solid #ff0038',
-        borderRadius: '16px',
-        width: '600px',
-        padding: '16px',
-        margin: '0 auto',
-        backgroundColor: '#ffffff'
+        border: 'none',
+        borderRadius: '20px',
+        width: '700px',
+        padding: '32px',
+        margin: '20px auto',
+        backgroundColor: '#ffffff',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
       }}>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Customer Name</label>
+        <h2 style={{ 
+          textAlign: 'center', 
+          color: '#ff0038',
+          marginBottom: '30px',
+          fontSize: '2rem',
+          fontWeight: 'bold'
+        }}>
+          Breakdown Service Request
+        </h2>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Customer Name
+          </label>
           <input
             type='text'
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           />
         </div>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Contact Number</label>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Contact Number
+          </label>
           <input
             type='text'
             value={contactNumber}
-             onChange={handleContactNumberChange}
+            onChange={handleContactNumberChange}
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           />
         </div>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Vehicle Number</label>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Vehicle Number
+          </label>
           <input
             type='text'
             value={vehicleNumber}
             onChange={(e) => setVehicleNumber(e.target.value)}
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           />
         </div>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Issue Type</label>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Issue Type
+          </label>
           <select
             value={issueType}
             onChange={(e) => setIssueType(e.target.value)}
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           >
             <option value='' disabled>Select issue type</option>
@@ -248,22 +309,42 @@ const CreateRequests = () => {
             <option value='Other'>Other</option>
           </select>
         </div>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Location</label>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Location
+          </label>
           <input
             type='text' 
             value={cityName ? `${cityName} ` : 'Select a location'}
             readOnly
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           />
         </div>
-        <MapContainer center={SERVICE_CENTER_LOCATION} zoom={13} style={{ height: '400px', marginBottom: '16px' }} ref={mapRef}>
+
+        <MapContainer center={SERVICE_CENTER_LOCATION} zoom={13} 
+          style={{ 
+            height: '400px', 
+            marginBottom: '24px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+          }} 
+          ref={mapRef}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -277,48 +358,75 @@ const CreateRequests = () => {
             </Marker>
           )}
         </MapContainer>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Total Distance</label>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Total Distance
+          </label>
           <input
             type='text'
             value={totalDistance ? `${totalDistance} km` : 'Select a location'}
             readOnly
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           />
         </div>
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ fontSize: '1rem', fontWeight: 'bold', marginRight: '16px', color: '#000039', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '8px' }}>Total Charge</label>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: 'bold', 
+            marginBottom: '8px', 
+            display: 'block',
+            color: '#333'
+          }}>
+            Total Charge
+          </label>
           <input
             type='text'
             value={totalCharge}
             readOnly
             style={{
-              border: '2px solid #ff0038',
-              borderRadius: '16px',
-              padding: '8px 16px',
+              border: '2px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '12px 20px',
               width: '100%',
-              backgroundColor: '#f8f8ff'
+              backgroundColor: '#fff',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              outline: 'none',
             }}
           />
         </div>
+
         <button
           onClick={handleSaveRequest}
           style={{
             border: 'none',
-            borderRadius: '16px',
-            padding: '12px 24px',
+            borderRadius: '12px',
+            padding: '16px 32px',
             backgroundColor: '#ff0038',
             color: '#ffffff',
             cursor: 'pointer',
             fontSize: '1.2rem',
             fontWeight: 'bold',
-            marginTop: '16px'
+            marginTop: '24px',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 6px rgba(255,0,56,0.2)',
           }}
         >
           Send Request
