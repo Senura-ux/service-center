@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BiUserCircle, BiShow, BiCar, BiPhone } from 'react-icons/bi';
+import { BiUserCircle, BiCar, BiPhone } from 'react-icons/bi';
 import { AiFillInfoCircle, AiOutlineEdit } from 'react-icons/ai';
-import { Bs0Circle, Bs1Circle, BsArrowRightCircle, BsBadge3D, BsBox, BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineDelete } from 'react-icons/md';
 import { useState, useEffect } from 'react';
 import BreakdownModal from './BreakdownModal';
@@ -14,7 +13,6 @@ import BreakdownReport from './BreakdownReport';
 const BreakdownSingleCard = ({ breakdownRequest }) => {
   const [showModal, setShowModal] = useState(false);
   const [drivers, setDrivers] = useState([]);
-  //const [assignedDrivers, setAssignedDrivers] = useState([]); // Track currently assigned drivers
   const [selectedDriver, setSelectedDriver] = useState('');
   const [status, setStatus] = useState(localStorage.getItem(`status_${breakdownRequest._id}`) || breakdownRequest.status || 'New');
   const [driverError, setDriverError] = useState(false); // Track driver assignment errors
@@ -48,68 +46,45 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
 
   const handleAssignDriver = async (event) => {
     const driverId = event.target.value;
+    if (!driverId) return;
+
     const selectedDriverData = drivers.find(driver => driver._id === driverId);
-    setSelectedDriver(driverId);
-  
-    localStorage.setItem(`selectedDriver_${breakdownRequest._id}`, driverId);
-  
+    if (!selectedDriverData) return;
+
     try {
-      const response = await axios.put(`http://localhost:5555/breakdownRequests/${breakdownRequest._id}/assign-driver`, {
-        assignedDriver: selectedDriverData.employeeName,
-      });
-  
-      alert(`Assigned ${selectedDriverData.employeeName} to ${breakdownRequest.customerName}`);
-      setDriverError(false); // Reset the error state if assignment is successful
-      localStorage.removeItem(`driverError_${breakdownRequest._id}`); // Clear error from localStorage
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        alert('This driver is already assigned to another active request. Please choose another driver.');
-        setSelectedDriver('Not Available'); // Set "Not Available" in the dropdown
-        setDriverError(true); // Indicate that the driver is unavailable
-        localStorage.setItem(`driverError_${breakdownRequest._id}`, 'true'); // Store error state in localStorage
-      } else {
-        console.error('Error assigning driver:', error);
+      // First check if driver has any existing assignments
+      const response = await axios.get('http://localhost:5555/breakdownRequests');
+      const existingAssignments = response.data.data.filter(request => 
+        request.assignedDriver === selectedDriverData.employeeName &&
+        (request.status === 'Accepted' || request.status === 'In Progress')
+      );
+
+      if (existingAssignments.length > 0) {
+        alert(`${selectedDriverData.employeeName} is currently assigned to another active request. Please wait until they complete their current assignment or choose another driver.`);
+        setSelectedDriver(''); // Reset selection
+        setDriverError(true);
+        localStorage.setItem(`driverError_${breakdownRequest._id}`, 'true');
+        return;
       }
+
+      // If no active assignments, proceed with assigning the driver
+      const assignResponse = await axios.put(
+        `http://localhost:5555/breakdownRequests/${breakdownRequest._id}/assign-driver`,
+        { assignedDriver: selectedDriverData.employeeName }
+      );
+
+      alert(`Successfully assigned ${selectedDriverData.employeeName} to ${breakdownRequest.customerName}`);
+      setSelectedDriver(driverId);
+      setDriverError(false);
+      localStorage.setItem(`selectedDriver_${breakdownRequest._id}`, driverId);
+      localStorage.removeItem(`driverError_${breakdownRequest._id}`);
+      
+    } catch (error) {
+      console.error('Error in driver assignment:', error);
+      alert('There was an error assigning the driver. Please try again.');
+      setSelectedDriver('');
+      setDriverError(true);
     }
-  };  
-
-  const handleAccept = async () => {
-    const selectedDriverData = drivers.find(driver => driver._id === selectedDriver);
-    const driverName = selectedDriverData ? selectedDriverData.employeeName : 'a driver';
-
-    setStatus('Accepted');
-    localStorage.setItem(`status_${breakdownRequest._id}`, 'Accepted');
-
-    updateStatusInDatabase('Accepted');
-
-    const message = encodeURIComponent(`Your request has been confirmed. Assigned Driver: ${driverName}`);
-    const phoneNumber = encodeURIComponent(breakdownRequest.contactNumber);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const handleDecline = async () => {
-    setStatus('Declined');
-    localStorage.setItem(`status_${breakdownRequest._id}`, 'Declined');
-
-    updateStatusInDatabase('Declined');
-
-    const message = encodeURIComponent('Your request has been declined. Try again.');
-    const phoneNumber = encodeURIComponent(breakdownRequest.contactNumber);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const handleComplete = async () => {
-    setStatus('Completed');
-    localStorage.setItem(`status_${breakdownRequest._id}`, 'Completed');
-
-    updateStatusInDatabase('Completed');
-
-    const message = encodeURIComponent('Your request has been marked as completed.');
-    const phoneNumber = encodeURIComponent(breakdownRequest.contactNumber);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
   };
 
   const updateStatusInDatabase = async (newStatus) => {
@@ -123,11 +98,36 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
   };
 
   const statusColorClasses = {
-    New: 'bg-green-500 text-white',
+    New: 'bg-purple-500 text-white',
     Accepted: 'bg-blue-500 text-white',
-    Declined: 'bg-red-500 text-white',
-    Completed: 'bg-yellow-300 text-white',
+    'In Progress': 'bg-yellow-500 text-white',
+    Completed: 'bg-green-500 text-white',
+    Declined: 'bg-red-500 text-white'
   };
+
+  const isDriverAssignmentDisabled = () => {
+    return ['Accepted', 'In Progress', 'Completed'].includes(status);
+  };
+
+  useEffect(() => {
+    // Listen for status updates
+    const checkStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5555/breakdownRequests/${breakdownRequest._id}`);
+        const currentStatus = response.data.status;
+        if (currentStatus !== status) {
+          setStatus(currentStatus);
+          localStorage.setItem(`status_${breakdownRequest._id}`, currentStatus);
+        }
+      } catch (error) {
+        console.error('Error fetching status:', error);
+      }
+    };
+
+    // Check status every 30 seconds
+    const intervalId = setInterval(checkStatus, 30000);
+    return () => clearInterval(intervalId);
+  }, [breakdownRequest._id, status]);
 
   return (
     <div
@@ -153,42 +153,15 @@ const BreakdownSingleCard = ({ breakdownRequest }) => {
         <h2 className="my-1">{breakdownRequest.contactNumber}</h2>
       </div>
 
-      <div className="mt-4 flex justify-between">
-        <div
-          onClick={handleAccept}
-          className="bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out"
-          style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          title="Accept"
-        >
-          <BsInfoCircle className="text-white text-xl" />
-        </div>
-
-        <div
-          onClick={handleDecline}
-          className="bg-red-500 text-white p-2 rounded-full cursor-pointer hover:bg-red-700 transition duration-300 ease-in-out"
-          style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          title="Decline"
-        >
-          <BsInfoCircle className="text-white text-xl" />
-        </div>
-
-        <div
-          onClick={handleComplete}
-          className="bg-yellow-300 text-white p-2 rounded-full cursor-pointer hover:bg-yellow-700 transition duration-300 ease-in-out"
-          style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          title="Complete"
-        >
-          <BsInfoCircle className="text-white text-xl" />
-        </div>
-      </div>
-
       <div className="mt-4">
         <label className="text-lg font-semibold">Assign Driver:</label>
         <select
           value={selectedDriver}
           onChange={handleAssignDriver}
-          className={`border rounded px-2 py-1 ${driverError ? 'bg-yellow-200' : ''}`} // Change background if error
-          style={{ width: '200px', maxWidth: '100%' }} // Set a specific width for the dropdown
+          disabled={isDriverAssignmentDisabled()}
+          className={`border rounded px-2 py-1 ${driverError ? 'bg-yellow-200' : ''} 
+            ${isDriverAssignmentDisabled() ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+          style={{ width: '200px', maxWidth: '100%' }}
         >
           <option value="">Select a driver</option>
           {drivers.map((driver) => (
