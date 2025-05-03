@@ -11,7 +11,6 @@ function BookUserDashboard() {
   const [customer, setCustomer] = useState([]);
   const [loadingBreakdowns, setLoadingBreakdowns] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); // Search input state
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
@@ -80,16 +79,10 @@ function BookUserDashboard() {
     }
   }, [userProfile]);
 
-  // Filter data based on search query (vehicle number)
-  const filteredBooks = books.filter((book) =>
-    book.vehicleNumber.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredCustomers = customer.filter((cust) =>
-    cust.vehicleNumber.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredBreakdownRequests = breakdownRequests.filter((breakdown) =>
-    breakdown.vehicleNumber.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Remove the filtering logic and just use the existing filtered data
+  const filteredBooks = books;
+  const filteredCustomers = customer;
+  const filteredBreakdownRequests = breakdownRequests;
 
   return (
     <div className="p-4">
@@ -103,16 +96,6 @@ function BookUserDashboard() {
           </div>
         </div>
       )}
-
-<div className="mb-6">
-  <input
-    type="text"
-    placeholder="Search by vehicle number"
-    className="p-2 w-1/3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-  />
-</div>
 
       {/* Bookings Section */}
       <div className="flex justify-between items-center">
