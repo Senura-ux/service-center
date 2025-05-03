@@ -70,7 +70,13 @@ const BreakdownTable = ({ breakdownRequests: initialBreakdownRequests, loading }
               <td className="border-b border-gray-300 p-4 text-left">
                 <div className="flex justify-start gap-x-4">
                   <Link to={`/breakdownRequests/details/${request._id}`}>
-                    <BsInfoCircle className="text-2xl text-green-800" />
+                    <BsInfoCircle className="text-2xl text-green-800 hover:text-green-600 transition-colors" />
+                  </Link>
+                  <Link to={`/breakdownRequests/edit/${request._id}`}>
+                    <AiOutlineEdit className="text-2xl text-yellow-600 hover:text-yellow-400 transition-colors" />
+                  </Link>
+                  <Link to={`/breakdownRequests/delete/${request._id}`}>
+                    <AiOutlineDelete className="text-2xl text-red-600 hover:text-red-400 transition-colors" />
                   </Link>
                 </div>
               </td>
